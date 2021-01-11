@@ -6,39 +6,42 @@
         <button class="btnimg"></button>
       </div>
       <section class="left">
-<!--        <div class="left_menu">-->
-<!--          <div class="user"></div>-->
-<!--          <div class="disk"></div>-->
-<!--          <div class="chat"></div>-->
+        <!--        <div class="left_menu">-->
+        <!--          <div class="user"></div>-->
+        <!--          <div class="disk"></div>-->
+        <!--          <div class="chat"></div>-->
 
-<!--          <div class="rubbish"></div>-->
-<!--          <div class="set"></div>-->
-<!--        </div>-->
-        <div class="left_list">
-          <div class="titlelist">
-            我的云盘
-          </div>
-          <ul class="list">
-            <li>
-              <span>标题1</span>
-              <ul>
-                <li>
-                  <span>标题一</span>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <span>标题2</span>
-              <ul>
-                <li>
-                  <span>标题一</span>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <!--          <div class="rubbish"></div>-->
+        <!--          <div class="set"></div>-->
+        <!--        </div>-->
+        <div class="titlelist">
+          我的云盘
         </div>
-        <div class="left_scroll"></div>
+
+        <div >
+          <el-menu
+              style="height: 100vh"
+              background-color="#dee6ff"
+              class="el-menu-vertical-demo"
+              @open=""
+              @close="">
+            <el-submenu @click="$router.push('/')" index="1">
+              <template slot="title">
+                <i @click="$router.push('/')" class="el-icon-folder"></i>
+                <span @click="$router.push('/')">根目錄</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item index="1-1">新建文件夹</el-menu-item>
+              </el-menu-item-group>
+
+            </el-submenu>
+            <div class="rubbish" @click="$router.push('/home/rubbish')"><i class="el-icon-delete-solid"></i></div>
+          </el-menu>
+
+        </div>
+
       </section>
+
 
 
       <section class="main">
@@ -283,5 +286,25 @@ export default {
     height: 40px;
     line-height: 40px;
   }
-
+  .el-menu{
+    margin-left: -100px;
+  }
+  .el-menu-item{
+    padding: 0;
+    margin-left: 50px;
+  }
+  .rubbish{
+    position: sticky;
+    top: 90%;
+    /*margin-top: 170%;*/
+    margin-right: 5rem;
+  }
+.el-icon-delete-solid{
+  font-size: 2.5rem;
+  color: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+  .el-icon-delete-solid:hover{
+    color: #09AAFF;
+  }
 </style>

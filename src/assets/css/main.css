@@ -24,9 +24,9 @@ span::selection,button::selection,div::selection,a::selection{
 }
 
 .left{
-	display: flex;
-	width: 320px;
-	position: relative;
+	/*display: flex;*/
+	width: 300px;
+	/*position: relative;*/
 }
 .left_menu{
 	flex: 1;
@@ -37,12 +37,12 @@ span::selection,button::selection,div::selection,a::selection{
 }
 .left_list{
 	overflow: auto;
-	padding: 10px 0px 0px 20px;
-	box-sizing:border-box ;
-	flex: 4;
+	/*padding: 10px 0px 0px 20px;*/
+	/*box-sizing:border-box ;*/
+	/*flex: 4;*/
 	height: 100%;
 	background: #dee6ff;
-	position: relative;
+	/*position: relative;*/
 }
 
 /*回收站*/
@@ -81,7 +81,7 @@ span::selection,button::selection,div::selection,a::selection{
 	justify-content: center;
 	align-items: center;
 	color: #fff;
-	position: absolute;
+	/*position: absolute;*/
 	left: 0;
 	top: 0;
 }
@@ -996,6 +996,8 @@ span::selection,button::selection,div::selection,a::selection{
 	box-sizing: border-box;
 	padding: 20px;
 }
+
+
 
 .listShow .rubbishBox{
 	overflow: auto;

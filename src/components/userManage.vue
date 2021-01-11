@@ -48,17 +48,31 @@
           <el-col :span="4"><div class="grid-content bg-purple">{{item.email}}</div></el-col>
           <el-col :span="4"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
           <el-col :span="4"><div class="grid-content bg-purple">
-            <i class="el-icon-warning-outline" v-if="item.status" @click="statusToFalse(item.username,index)"></i>
-            <i class="el-icon-warning" v-if="!item.status" @click="statusToTrue(item.username,index)"></i>
+            <el-switch
+                v-model="item.status"
+                active-color="#13ce66"
+                inactive-color="#ff4949">
+            </el-switch>
+<!--            <i class="el-icon-warning-outline" v-if="item.status" @click="statusToFalse(item.username,index)"></i>-->
+<!--            <i class="el-icon-warning" v-if="!item.status" @click="statusToTrue(item.username,index)"></i>-->
             <i class="el-icon-delete" @click="userDel(item.username,index)"></i>
           </div></el-col>
-          <el-col :span="4"><div class="grid-content bg-purple">
+          <el-col :span="4"><div class="grid-content bg-purple" v-if="item.userRequest">
             <i class="el-icon-circle-check"></i>
             <i class="el-icon-circle-close"></i>
           </div></el-col>
         </el-row>
+
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="100">
+        </el-pagination>
       </el-main>
     </el-container>
+
+
+
   </div>
 </template>
 
@@ -76,21 +90,24 @@
             tel:'123123',
             email:'123123',
             name:'11',
-            status:true
+            status:true,
+            userRequest:false
           },
           {
             username:'22',
             tel:'2222',
             email:'2222',
             name:'22222',
-            status:true
+            status:true,
+            userRequest:true
           },
           {
             username:'33',
             tel:'333',
             email:'333333',
             name:'3333333',
-            status:false
+            status:false,
+            userRequest:false
           }
         ],
         dialogFormVisible:false,
@@ -105,12 +122,13 @@
       }
     },
     methods:{
-      statusToFalse(username,index){
-        this.userList[index].status = false
-      },
-      statusToTrue(username,index){
-        this.userList[index].status = true
-      },
+      //设置禁用状态
+      // statusToFalse(username,index){
+      //   this.userList[index].status = false
+      // },
+      // statusToTrue(username,index){
+      //   this.userList[index].status = true
+      // },
       userDel(username,index){
         this.userList.splice(index,1)
       },
@@ -134,7 +152,7 @@
         reader.onload = function () {
           console.log(reader.result)
           let data = reader.result.split(',')[1] //获得文件的base64格式
-          
+
           adminBatch({data})
             .then(res => {
               console.log(res);
@@ -239,8 +257,14 @@
     font-size: 1.5rem;
   }
   .el-icon-delete{
+    margin-left: 1.5rem;
     color: red;
     font-size: 1.5rem;
   }
-
+.el-pagination{
+  position: absolute;
+  bottom: 5vh;
+  left: 50% ;
+  transform: translate(-50%);
+}
 </style>

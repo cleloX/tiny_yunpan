@@ -27,8 +27,13 @@ const routes = [
       },
       {
         path:'home/userManage',
-        meta: { auth: true,title:'主界面' },
+        meta: { auth: true,title:'用户信息' },
         component: () => import('../components/userManage')
+      },
+      {
+        path:'home/rubbish',
+        meta: { auth: true,title:'回收站' },
+        component: () => import('../components/Rubbish')
       },
     ]
 
@@ -56,14 +61,14 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title
   }
   // 目标路由是否需要鉴权
-  if (to.meta.auth) {
-    let token = sessionStorage.getItem('token') ? true : false
-    if (!token) {
-      Vue.prototype.$message.error('登录状态无效！请使用账号密码进行登陆！');
-      next('/login')
-      return
-    }
-  }
+  // if (to.meta.auth) {
+  //   let token = sessionStorage.getItem('token') ? true : false
+  //   if (!token) {
+  //     Vue.prototype.$message.error('登录状态无效！请使用账号密码进行登陆！');
+  //     next('/login')
+  //     return
+  //   }
+  // }
   next()
 })
 
