@@ -46,7 +46,17 @@
             </div></el-col>
           </div>
         </div>
+
+        <div>
+          <el-pagination
+              background
+              layout="prev, pager, next"
+              :total="100">
+          </el-pagination>
+        </div>
+
       </div>
+
     </div>
   </div>
 </template>
@@ -242,5 +252,12 @@
   }
   .el-icon-position{
     font-size: 1.2rem;
+  }
+  .el-pagination{
+    position: absolute;
+    top: 85vh;
+    left: 50%;
+    transform: translate(-50%);
+
   }
 </style>

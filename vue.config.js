@@ -20,7 +20,7 @@ module.exports = {
   //   }
   // },
 
-  // publicPath: './',
+  publicPath: './',
   //
   //
   // devServer: {
