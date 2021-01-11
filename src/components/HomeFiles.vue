@@ -211,11 +211,15 @@
           selectAlls.forEach(item => {
             item.classList.add('active')
           })
+          this.checked = JSON.parse(JSON.stringify(this.datas))
         }else{
           selectAlls.forEach(item => {
             item.classList.remove('active')
           })
+          this.checked = []
         }
+
+        console.log(this.checked)
       },
       //share
       share(){
