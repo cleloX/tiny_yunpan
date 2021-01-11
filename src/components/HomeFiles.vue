@@ -15,9 +15,11 @@
         </button>
 
 <!--        <button>新建文件夹</button>-->
-        <button @click="delFile">删除</button>
+
 <!--        <button @click="rename">重命名</button>-->
-        <button @click="share">分享</button>
+        <button @click="share"><i class="el-icon-position"></i>分享</button>
+        <button @click="delFile">删除</button>
+        <button @click="selectAll">全选</button>
 
       </div>
     </div>
@@ -32,7 +34,7 @@
           </div>
         </div>
         <div v-for="(item,index) in datas">
-          <div class="fileitem"  @contextmenu.prevent="showRightClickMenu" @click="checkItem($event,item)" @dblclick="preview(item.url)">
+          <div class="fileitem checkAll"   @click="checkItem($event,item)" @dblclick="preview(item.url)">
             <el-col  :span="5"><div  class="grid-content" >
                             <i class="el-icon-video-camera" v-if="item.name.split('.')[1] == 'mp4'"></i>
                             <i class="el-icon-picture-outline" v-else-if="item.name.split('.')[1] == 'png' || item.name.split('.')[1] =='jpg'"></i>
@@ -68,7 +70,8 @@
             name:'3.jpg',
             url: 'https://sust-group-11.obs.cn-east-3.myhuaweicloud.com/1.jpg'
           },],
-        checked:[]
+        checked:[],
+        active:0
       }
     },
     components: {
@@ -165,6 +168,11 @@
             this.datas.pop()
           }
         })
+        this.$message({
+          message: '删除成功',
+          type: 'success',
+          duration:1000
+        });
       },
 
       stopPropagation(event){
@@ -194,6 +202,21 @@
         getNode(e.target)
       },
 
+      //全选
+      selectAll(){
+        this.active = !this.active
+        let selectAlls = document.querySelectorAll('.checkAll')
+        // console.log(selectAlls)
+        if(this.active){
+          selectAlls.forEach(item => {
+            item.classList.add('active')
+          })
+        }else{
+          selectAlls.forEach(item => {
+            item.classList.remove('active')
+          })
+        }
+      },
       //share
       share(){
         this.$alert('链接为：' + this.checked[0].url, '分享文件', {
@@ -202,60 +225,6 @@
       },
 
 
-      showRightClickMenu(e){
-        //鼠标在空白处跳出菜单
-        if(e.target.classList.contains('file-container')){
-          if(isRec)return; //在回收站不能新建
-          menu =  creatMenu(data_menu,false);
-          fileWrap.appendChild(menu);
-          menuMove(e,menu);
-        };
-        //鼠标在文件夹范围内跳出菜单
-        if(getParentCls(e.target,'fileitem')){
-          menu =  creatMenu(data_menu,true);
-          fileWrap.appendChild(menu);
-          menuMove(e,menu);
-        }
-
-        // 菜单隐藏
-        document.addEventListener('mouseup',function(e){
-          if(isOpenMenu){
-            fileWrap.removeChild(menu);
-            isOpenMenu = false;
-          }
-        });
-      },
-
-      //创建菜单
-      creatMenu(dataMenu,isFile){
-        var div = document.createElement('div');
-        div.className = 'menu';
-
-        var menuList = [];
-        if(isFile){
-          if(isRec){
-            menuList = ['del','rename','moveto'];
-          }else{
-            menuList = ['del','rename','moveto','copyto','paste'];
-          }
-        }else{
-          menuList = ['creat','upload','paste'];
-        }
-
-        menuList.forEach(function(item){
-          var a = document.createElement('a');
-          var span = document.createElement('span');
-          span.innerHTML = dataMenu[item].name;
-          span.onmouseup = dataMenu[item].click;
-          //		a.onmouseup = dataMenu[item].click;
-          span.style.background = dataMenu[item].background;
-          span.style.backgroundSize = dataMenu[item]['background-size'];
-          a.appendChild(span);
-          div.appendChild(a);
-        })
-
-        return div;
-      }
 
 
     }
@@ -266,5 +235,8 @@
   .fileitem{
     height: 40px;
     line-height: 40px;
+  }
+  .el-icon-position{
+    font-size: 1.2rem;
   }
 </style>

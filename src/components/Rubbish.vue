@@ -90,13 +90,30 @@
 
             _this.datas[i] = _this.datas[_this.datas.length-1]
             _this.datas.pop()
+            this.$message({
+              message: '恢复文件成功',
+              type: 'success',
+              duration:1000
+            });
+            return
           }
         }
+
+        this.$message({
+          message: '恢复文件失败',
+          type: 'error',
+          duration:1000
+        });
 
       },
       //清空回收站
       empty(){
         this.datas = []
+        this.$message({
+          message: '清空回收站成功',
+          type: 'success',
+          duration:1000
+        });
       }
 
     }
