@@ -21,19 +21,17 @@
 <!--            <input type="text" value="重命名" />-->
 <!--          </div>-->
 <!--        </div>-->
-        <div v-for="item in datas">
-          <div class="fileitem" @contextmenu.prevent="showRightClickMenu" @click="checkItem($event,item.id)">
-            <el-row >
-              <el-col :span="24"><div class="grid-content" >
-                <i class="el-icon-video-camera" v-if="item.name.split('.')[1] == 'mp4'"></i>
-                <i class="el-icon-picture-outline" v-else-if="item.name.split('.')[1] == ('png' || 'jpg')"></i>
-                <i class="el-icon-notebook-2" v-else-if="item.name.split('.')[1] == 'word'"></i>
-                <i v-else class="el-icon-bank-card" ></i>
-                {{item.name}}
-              </div></el-col>
-
-<!--              <el-col :span="24"><div class="grid-content" >{{item.name}}</div></el-col>-->
-            </el-row>
+        <div v-for="(item,index) in datas" :key="item.fileid">
+          <div class="fileitem checkAll" v-if="!item.used"   @click="checkItem($event,item)" @dblclick="preview(item.url)">
+            <el-col :span="12" ><div class="grid-content" >{{item.filename}}</div></el-col>
+            <el-col  :span="4"><div  class="grid-content" >
+              <i class="el-icon-video-camera" v-if="item.type === 'mp4'"></i>
+              <i class="el-icon-picture-outline" v-else-if="item.type === 'png' || item.type ==='jpg'"></i>
+              <i class="el-icon-notebook-2" v-else-if="item.type === 'word'"></i>
+              <i v-else class="el-icon-bank-card" ></i>
+              {{item.type}}
+            </div></el-col>
+            <el-col :span="8"><div class="grid-content" >{{item.size}}</div></el-col>
           </div>
         </div>
       </div>
@@ -42,35 +40,80 @@
 </template>
 
 <script>
+  import {getFileList} from "../network/getFileList";
+  import {recycle} from "../network/deleteANDrecycle";
+
   export default {
     name: "Rubbish",
     data(){
       return{
         datas:[
-          {id:1,
-            name:'1.pdf'
+          {
+            fileid:1,
+            filename:'3.pdf',
+            type:'pdf',
+            size:'5kb',
+            url:'',
+            used:0,
+            cateid:1,
+            username:'pcb'
+
           },
           {
-            id:2,
-            name:'2.mp4'
-          }],
+            fileid:2,
+            filename:'2.mp4',
+            type:'mp4',
+            size:'5kb',
+            url:'https://sust-group-11.obs.cn-east-3.myhuaweicloud.com/ead7caa0-134e-4045-9544-389328682580.mp4',
+            used:0,
+            cateid:1,
+            username:'pcb'
+
+          },
+          {
+            fileid:3,
+            filename:'1.jpg',
+            type:'jpg',
+            size:'800kb',
+            url:'https://sust-group-11.obs.cn-east-3.myhuaweicloud.com/1.jpg',
+            used:true,
+            cateid:1,
+            username:'pcb'
+
+          }
+        ],
         checked:[]
       }
     },
+    created:function() {
+      this.getFilesList()
+    },
     methods:{
+      //获取数据
+      getFilesList(){
+        let FormList = new FormData()
+        FormList.append('username',sessionStorage.getItem('username'))
+        getFileList(FormList)
+            .then(res => {
+              if(res.data.status){
+                this.datas = res.data.data
+              }
+            })
+      },
+
       //选中文件
-      checkItem(e,id){
+      checkItem(e,item){
         console.log(e.target)
         let  _this = this
         function getNode(node) {
           if (node.className.includes('fileitem')) {
             if(node.className.includes('active')){
               node.className = 'fileitem'
-              _this.checked[_this.checked.indexOf(id)] = _this.checked[_this.checked.length-1]
+              _this.checked[_this.checked.indexOf(item)] = _this.checked[_this.checked.length-1]
               _this.checked.pop()
             }else {
               node.classList.add('active')
-              _this.checked.push(id)
+              _this.checked.push(item)
             }
 
             console.log(_this.checked)
@@ -82,28 +125,44 @@
         getNode(e.target)
       },
 
+
+
       //恢复文件
       recover(){
-        for (let i = 0;i<this.datas.length;i++){
-          if(this.datas[i].id == this.checked[0]){
-            let _this = this
-
-            _this.datas[i] = _this.datas[_this.datas.length-1]
-            _this.datas.pop()
-            this.$message({
-              message: '恢复文件成功',
-              type: 'success',
-              duration:1000
-            });
-            return
-          }
-        }
-
-        this.$message({
-          message: '恢复文件失败',
-          type: 'error',
-          duration:1000
-        });
+        // for (let i = 0;i<this.datas.length;i++){
+        //   if(this.datas[i] == this.checked[0]){
+        //     let _this = this
+        //
+        //     _this.datas[i] = _this.datas[_this.datas.length-1]
+        //     _this.datas.pop()
+        //     this.$message({
+        //       message: '恢复文件成功',
+        //       type: 'success',
+        //       duration:1000
+        //     });
+        //     return
+        //   }
+        // }
+        //
+        // this.$message({
+        //   message: '恢复文件失败',
+        //   type: 'error',
+        //   duration:1000
+        // });
+        let rec = new FormData()
+        rec.append('fileid', this.checked[0].fileid)
+        rec.append('username', this.checked[0].username)
+        recycle(rec)
+            .then(res => {
+              if(res.data.status){
+                this.$message({
+                  message: '恢复成功',
+                  type: 'success',
+                  duration:1000
+                });
+                this.getFilesList()
+              }
+            })
 
       },
       //清空回收站

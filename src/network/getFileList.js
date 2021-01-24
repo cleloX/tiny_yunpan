@@ -1,9 +1,8 @@
 import {$axios} from "./index";
 
-export function login(obj) {
+export function getFileList(obj) {
   return  $axios({
-
-    url:'/user/login',
+    url:'/file/find',
     method:'post',
     data:obj
   })

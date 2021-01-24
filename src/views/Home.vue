@@ -167,6 +167,7 @@ export default {
     logOut(){
       sessionStorage.setItem('token',false)
       sessionStorage.removeItem('isAdmin')
+      sessionStorage.removeItem('shareVerify')
       this.$router.push('/login')
     },
     //进入用户管理

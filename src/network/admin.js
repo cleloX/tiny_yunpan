@@ -4,7 +4,7 @@ export function adminBatch(obj) {
   console.log(obj)
   return  $axios({
 
-    url:'http://localhost:7070'+'/admin/batch',
+    url:'/admin/batch',
     method:'post',
     data:obj
   })
@@ -14,7 +14,7 @@ export function adminSingle(obj) {
   console.log(obj)
   return  $axios({
 
-    url:'http://localhost:7070'+'/admin/single',
+    url:'/admin/single',
     method:'post',
     data:obj
   })

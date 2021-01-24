@@ -35,6 +35,10 @@ const routes = [
         meta: { auth: true,title:'回收站' },
         component: () => import('../components/Rubbish')
       },
+      {
+        path:'home/share',
+        component: () => import('../components/shareFiles/ShareFiles')
+      },
     ]
 
   },
@@ -44,6 +48,11 @@ const routes = [
     name: 'Login',
     component: Login
   },
+  {
+    path: '/verify',
+    name: 'Verify',
+    component: () => import('../components/shareFiles/Verify')
+  },
 
 ]
 
@@ -52,13 +61,19 @@ const routes = [
 
 
 const router = new VueRouter({
-  routes
+  routes,
+  // mode:'history'
 })
 
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title
+  }
+  console.log(to.query.folderID)
+  if(to.path.includes('/share')){
+    if(sessionStorage.getItem('shareVerify')) next()
+    else next({path:'/verify',params:{folderID:to.query.folderID,username:to.query.username}})
   }
   // 目标路由是否需要鉴权
   // if (to.meta.auth) {
@@ -69,7 +84,8 @@ router.beforeEach((to, from, next) => {
   //     return
   //   }
   // }
-  next()
+  if(to.path === from.path) next(false)
+  else next()
 })
 
 

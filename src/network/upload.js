@@ -2,9 +2,9 @@ import {$axios} from "./index";
 
 export function upload(obj) {
   console.log(obj)
+  console.log(typeof obj.multipartFile,'--',obj.multipartFile)
   return  $axios({
-
-    url:'http://106.15.195.12:8000/'+'/login',
+    url:'/file/upload',
     method:'post',
     data:obj
   })

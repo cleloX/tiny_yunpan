@@ -5,7 +5,7 @@ import Axios from 'axios'
 
 export function $axios(config){
   let http = Axios.create({
-    // baseURL: 'http://106.15.195.12:8000/',
+    baseURL: 'http://localhost:7070',
     timeout: 5000
   })
 

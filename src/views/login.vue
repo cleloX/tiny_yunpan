@@ -99,6 +99,7 @@
               sessionStorage.setItem('token',true)
               if(res.data.status == 1)
                 sessionStorage.setItem('isAdmin',true)
+              sessionStorage.setItem('username', this.form.username)
               this.$message({
                 type: 'success',
                 message: '登录成功，正在为你跳转'
